@@ -84,6 +84,23 @@ nav {
   text-decoration: none;
 }
 
+/* Misma marca que el nav, más presente sobre el titular del hero */
+#hero .hero-logo.nav-logo {
+  font-size: clamp(18px, 3.8vw, 26px);
+  letter-spacing: -0.45px;
+  margin-bottom: 20px;
+  display: inline-block;
+  position: relative;
+  z-index: 1;
+  animation: fade-up 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 0.22s;
+  transition: opacity 0.2s;
+}
+
+#hero .hero-logo.nav-logo:hover {
+  opacity: 0.85;
+}
+
 .nav-links {
   display: flex;
   gap: 32px;
