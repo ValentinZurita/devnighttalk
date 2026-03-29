@@ -86,9 +86,9 @@ nav {
 
 /* Misma marca que el nav, más presente sobre el titular del hero */
 #hero .hero-logo.nav-logo {
-  font-size: clamp(18px, 3.8vw, 26px);
-  letter-spacing: -0.45px;
-  margin-bottom: 20px;
+  font-size: clamp(28px, 7.5vw, 44px);
+  letter-spacing: -0.9px;
+  margin-bottom: 16px;
   display: inline-block;
   position: relative;
   z-index: 1;
@@ -592,17 +592,32 @@ h1 {
 
 .map-facade-pin { font-size: 36px; line-height: 1; opacity: 0.9; }
 
+.map-facade-spinner {
+  display: none;
+  width: 30px;
+  height: 30px;
+  border: 2px solid rgba(255,255,255,0.15);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: map-spin 0.65s linear infinite;
+}
+
+@keyframes map-spin {
+  to { transform: rotate(360deg); }
+}
+
+.map-facade--loading .map-facade-pin { display: none; }
+.map-facade--loading .map-facade-spinner { display: block; }
+
 .map-facade-title {
   font-size: 17px;
   font-weight: 700;
   letter-spacing: -0.2px;
 }
 
-.map-facade-hint {
-  font-size: 13px;
+.map-facade--loading .map-facade-title {
   color: var(--muted);
-  max-width: 220px;
-  line-height: 1.45;
+  font-weight: 600;
 }
 
 .map-iframe {

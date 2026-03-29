@@ -20,6 +20,8 @@
 
   <meta name="description" content="Dev Night Talks es la comunidad de desarrolladores en Villahermosa, Tabasco. Nos reunimos cada jueves a las 7 PM en LATI.mx para charlas tech, aprendizaje y networking." />
 
+  <link rel="preconnect" href="https://www.google.com" />
+  <link rel="dns-prefetch" href="https://maps.googleapis.com" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
@@ -209,10 +211,10 @@
     <p class="section-sub reveal">Laboratorio de Arte, Tecnología e Innovación · Villahermosa, Tab.</p>
     <div class="location-container reveal">
       <div class="location-map" id="location-map">
-        <button type="button" class="map-facade" id="map-facade" aria-label="Cargar mapa interactivo">
-          <span class="map-facade-pin" aria-hidden="true">📍</span>
-          <span class="map-facade-title">Mapa interactivo</span>
-          <span class="map-facade-hint">Toca para cargar · más rápido al abrir la página</span>
+        <button type="button" class="map-facade" id="map-facade" aria-label="Ver mapa de la ubicación">
+          <span class="map-facade-pin" id="map-facade-pin" aria-hidden="true">📍</span>
+          <span class="map-facade-spinner" id="map-facade-spinner" aria-hidden="true"></span>
+          <span class="map-facade-title" id="map-facade-title">Ver mapa</span>
         </button>
         <iframe
           id="map-iframe"
@@ -220,7 +222,6 @@
           hidden
           data-src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3794.4!2d-92.9468!3d17.9847!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85ede8f5b8d9cfe1%3A0x56ef8f498c3e5b63!2sPlaza%20Deportiva%2C%20Villahermosa%2C%20Tab.!5e0!3m2!1ses!2smx!4v1680000000000"
           allowfullscreen
-          loading="lazy"
           referrerpolicy="no-referrer-when-downgrade"
           title="Ubicación Dev Night Talks"
         ></iframe>

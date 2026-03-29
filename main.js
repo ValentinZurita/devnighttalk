@@ -59,17 +59,52 @@ window.addEventListener('load', () => {
   });
 });
 
-// ── MAP: carga el iframe solo al tocar (Google Maps es pesado) ──
-document.getElementById('map-facade')?.addEventListener('click', () => {
+// ── MAP: precarga al acercarse a la sección + click; UI con "Cargando mapa…" ──
+let mapLoadStarted = false;
+
+function startMapLoad() {
   const iframe = document.getElementById('map-iframe');
   const facade = document.getElementById('map-facade');
-  const src = iframe?.dataset?.src;
-  if (!iframe || !src) return;
+  const title = document.getElementById('map-facade-title');
+  const src = iframe?.getAttribute('data-src');
+  if (!iframe || !src || mapLoadStarted) return;
+
+  mapLoadStarted = true;
+  facade?.classList.add('map-facade--loading');
+  if (title) title.textContent = 'Cargando mapa…';
+  facade?.setAttribute('aria-busy', 'true');
+
+  iframe.addEventListener(
+    'load',
+    () => {
+      iframe.removeAttribute('hidden');
+      facade?.setAttribute('hidden', '');
+      facade?.removeAttribute('aria-busy');
+    },
+    { once: true }
+  );
+
   iframe.src = src;
   iframe.removeAttribute('data-src');
-  iframe.removeAttribute('hidden');
-  facade?.setAttribute('hidden', '');
-});
+}
+
+document.getElementById('map-facade')?.addEventListener('click', startMapLoad);
+
+const locationSection = document.getElementById('location');
+if (locationSection) {
+  const mapPrefetch = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          startMapLoad();
+          mapPrefetch.disconnect();
+        }
+      });
+    },
+    { rootMargin: '320px 0px', threshold: 0 }
+  );
+  mapPrefetch.observe(locationSection);
+}
 
 // ── SCROLL REVEAL ──
 const reveals = document.querySelectorAll('.reveal');
