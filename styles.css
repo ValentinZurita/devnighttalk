@@ -734,50 +734,6 @@ footer {
 ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: #555; }
 
-/* ── CUSTOM CURSOR ── */
-* { cursor: none !important; }
-
-.cursor-dot,
-.cursor-ring {
-  position: fixed;
-  top: 0; left: 0;
-  pointer-events: none;
-  z-index: 9999;
-  border-radius: 50%;
-  mix-blend-mode: exclusion;
-  will-change: transform;
-}
-
-.cursor-dot {
-  width: 8px;
-  height: 8px;
-  background: #fff;
-  transform: translate(-50%, -50%);
-  transition: opacity 0.3s, transform 0.15s ease;
-}
-
-.cursor-ring {
-  width: 36px;
-  height: 36px;
-  border: 1px solid rgba(255,255,255,0.7);
-  background: transparent;
-  transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1),
-              height 0.4s cubic-bezier(0.16, 1, 0.3, 1),
-              background 0.3s ease,
-              opacity 0.3s;
-}
-
-.cursor-ring.hovering {
-  width: 56px;
-  height: 56px;
-  background: rgba(255,255,255,0.08);
-  border-color: rgba(255,255,255,0.9);
-}
-
-.cursor-dot.clicking  { transform: translate(-50%, -50%) scale(0.5); }
-
-.cursor-dot.hidden,
-.cursor-ring.hidden { opacity: 0; }
 
 /* ── SCROLL PROGRESS BAR ── */
 #progress-bar {
