@@ -23,6 +23,38 @@ body {
   overflow-x: hidden;
 }
 
+/* ── KEYFRAMES ── */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes nav-enter {
+  from { transform: translateY(-100%); opacity: 0; }
+  to   { transform: translateY(0);     opacity: 1; }
+}
+
+@keyframes gradient-flow {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes glow-breathe {
+  0%, 100% { transform: translateX(-50%) scale(1);    opacity: 1; }
+  50%       { transform: translateX(-50%) scale(1.18); opacity: 0.65; }
+}
+
+@keyframes btn-shimmer {
+  0%        { left: -80%; }
+  50%, 100% { left: 160%; }
+}
+
+@keyframes cta-pulse {
+  0%, 100% { transform: translateX(-50%) scale(1);   opacity: 0.7; }
+  50%       { transform: translateX(-50%) scale(1.25); opacity: 1; }
+}
+
 /* ── NAV ── */
 nav {
   position: fixed;
@@ -38,6 +70,7 @@ nav {
   -webkit-backdrop-filter: saturate(180%) blur(20px);
   border-bottom: 1px solid var(--border);
   transition: background 0.3s;
+  animation: nav-enter 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 .nav-logo {
@@ -105,6 +138,15 @@ nav {
     rgba(255,111,255,0.08) 40%,
     transparent 70%);
   pointer-events: none;
+  animation: glow-breathe 8s ease-in-out infinite;
+}
+
+.hero-spotlight {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  transition: background 0.1s ease;
+  z-index: 0;
 }
 
 .hero-badge {
@@ -121,6 +163,10 @@ nav {
   margin-bottom: 32px;
   letter-spacing: 0.5px;
   text-transform: uppercase;
+  animation: fade-up 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 0.15s;
+  position: relative;
+  z-index: 1;
 }
 
 .hero-badge::before {
@@ -144,13 +190,19 @@ h1 {
   letter-spacing: -2px;
   line-height: 1.05;
   margin-bottom: 24px;
+  animation: fade-up 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 0.3s;
+  position: relative;
+  z-index: 1;
 }
 
 .gradient-text {
-  background: linear-gradient(135deg, #fff 0%, #b8b0ff 50%, #ff6fff 100%);
+  background: linear-gradient(135deg, #fff 0%, #b8b0ff 30%, #ff6fff 65%, #b8b0ff 100%);
+  background-size: 300% 300%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  animation: gradient-flow 7s ease infinite;
 }
 
 .hero-sub {
@@ -160,6 +212,10 @@ h1 {
   margin: 0 auto 48px;
   font-weight: 400;
   line-height: 1.5;
+  animation: fade-up 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 0.45s;
+  position: relative;
+  z-index: 1;
 }
 
 .hero-actions {
@@ -167,6 +223,10 @@ h1 {
   gap: 16px;
   flex-wrap: wrap;
   justify-content: center;
+  animation: fade-up 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 0.6s;
+  position: relative;
+  z-index: 1;
 }
 
 .btn-primary {
@@ -179,11 +239,25 @@ h1 {
   text-decoration: none;
   transition: transform 0.2s, box-shadow 0.2s;
   box-shadow: 0 0 30px rgba(123,111,255,0.4);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -80%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.22), transparent);
+  animation: btn-shimmer 3.5s ease infinite;
+  animation-delay: 1.2s;
 }
 
 .btn-primary:hover {
   transform: scale(1.03);
-  box-shadow: 0 0 50px rgba(123,111,255,0.6);
+  box-shadow: 0 0 50px rgba(123,111,255,0.65);
 }
 
 .btn-ghost {
@@ -287,12 +361,14 @@ h1 {
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 40px 32px;
-  transition: border-color 0.3s, transform 0.3s;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  transform-style: preserve-3d;
+  will-change: transform;
 }
 
 .about-card:hover {
   border-color: rgba(123,111,255,0.4);
-  transform: translateY(-4px);
+  box-shadow: 0 20px 60px rgba(123,111,255,0.12);
 }
 
 .card-icon {
@@ -522,6 +598,7 @@ h1 {
     rgba(123,111,255,0.1) 40%,
     transparent 70%);
   pointer-events: none;
+  animation: cta-pulse 6s ease-in-out infinite;
 }
 
 #cta h2 {
