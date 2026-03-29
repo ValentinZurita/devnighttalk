@@ -1,3 +1,96 @@
+// ── CUSTOM CURSOR ──
+const cursorDot  = document.getElementById('cursor-dot');
+const cursorRing = document.getElementById('cursor-ring');
+
+let ringX = 0, ringY = 0;
+let dotX  = 0, dotY  = 0;
+let raf;
+
+function moveCursor(e) {
+  dotX = e.clientX;
+  dotY = e.clientY;
+}
+
+function animateRing() {
+  ringX += (dotX - ringX) * 0.12;
+  ringY += (dotY - ringY) * 0.12;
+
+  cursorDot.style.transform  = `translate(${dotX}px, ${dotY}px) translate(-50%, -50%)`;
+  cursorRing.style.transform = `translate(${ringX}px, ${ringY}px) translate(-50%, -50%)`;
+
+  raf = requestAnimationFrame(animateRing);
+}
+
+window.addEventListener('mousemove', moveCursor);
+document.addEventListener('mouseenter', () => {
+  cursorDot.classList.remove('hidden');
+  cursorRing.classList.remove('hidden');
+});
+document.addEventListener('mouseleave', () => {
+  cursorDot.classList.add('hidden');
+  cursorRing.classList.add('hidden');
+});
+
+// Grow ring on interactive elements
+const hoverTargets = 'a, button, .about-card, .event-card, .topic-tag, .social-btn';
+document.querySelectorAll(hoverTargets).forEach(el => {
+  el.addEventListener('mouseenter', () => cursorRing.classList.add('hovering'));
+  el.addEventListener('mouseleave', () => cursorRing.classList.remove('hovering'));
+});
+
+cursorDot.classList.add('hidden');
+cursorRing.classList.add('hidden');
+animateRing();
+
+// ── TEXT SCRAMBLE ──
+const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%&';
+
+function scramble(el, finalText, duration = 1200, delay = 0) {
+  const total = finalText.length;
+  const startTime = performance.now() + delay;
+
+  function tick(now) {
+    const elapsed = Math.max(0, now - startTime);
+    const progress = Math.min(elapsed / duration, 1);
+    const revealed = Math.floor(progress * total);
+
+    let result = '';
+    for (let i = 0; i < total; i++) {
+      if (finalText[i] === ' ' || finalText[i] === '\n') {
+        result += finalText[i];
+      } else if (i < revealed) {
+        result += finalText[i];
+      } else {
+        result += CHARS[Math.floor(Math.random() * CHARS.length)];
+      }
+    }
+    el.textContent = result;
+
+    if (progress < 1) requestAnimationFrame(tick);
+    else el.textContent = finalText;
+  }
+
+  requestAnimationFrame(tick);
+}
+
+window.addEventListener('load', () => {
+  const h1 = document.querySelector('#hero h1');
+  if (!h1) return;
+
+  // Scramble the plain text node ("La comunidad")
+  const textNode = h1.firstChild;
+  const original = textNode.textContent.trim();
+  textNode.textContent = original;
+  scramble(textNode, original, 1000, 300);
+
+  // Scramble the gradient span ("dev de Villa.")
+  const span = h1.querySelector('.gradient-text');
+  if (span) {
+    const spanText = span.textContent;
+    scramble(span, spanText, 900, 600);
+  }
+});
+
 // ── SCROLL REVEAL ──
 const reveals = document.querySelectorAll('.reveal');
 const revealObserver = new IntersectionObserver((entries) => {
