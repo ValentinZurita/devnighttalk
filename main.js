@@ -4,24 +4,24 @@ const cursorRing = document.getElementById('cursor-ring');
 
 let ringX = 0, ringY = 0;
 let dotX  = 0, dotY  = 0;
-let raf;
 
-function moveCursor(e) {
+function animateCursor() {
+  // Dot follows instantly via CSS transform set on mousemove
+  // Ring follows with smooth lerp
+  ringX += (dotX - ringX) * 0.08;
+  ringY += (dotY - ringY) * 0.08;
+
+  cursorRing.style.transform = `translate(calc(${ringX}px - 50%), calc(${ringY}px - 50%))`;
+
+  requestAnimationFrame(animateCursor);
+}
+
+window.addEventListener('mousemove', (e) => {
   dotX = e.clientX;
   dotY = e.clientY;
-}
+  cursorDot.style.transform = `translate(calc(${dotX}px - 50%), calc(${dotY}px - 50%))`;
+});
 
-function animateRing() {
-  ringX += (dotX - ringX) * 0.12;
-  ringY += (dotY - ringY) * 0.12;
-
-  cursorDot.style.transform  = `translate(${dotX}px, ${dotY}px) translate(-50%, -50%)`;
-  cursorRing.style.transform = `translate(${ringX}px, ${ringY}px) translate(-50%, -50%)`;
-
-  raf = requestAnimationFrame(animateRing);
-}
-
-window.addEventListener('mousemove', moveCursor);
 document.addEventListener('mouseenter', () => {
   cursorDot.classList.remove('hidden');
   cursorRing.classList.remove('hidden');
@@ -31,8 +31,11 @@ document.addEventListener('mouseleave', () => {
   cursorRing.classList.add('hidden');
 });
 
-// Grow ring on interactive elements
-const hoverTargets = 'a, button, .about-card, .event-card, .topic-tag, .social-btn';
+document.addEventListener('mousedown', () => cursorDot.classList.add('clicking'));
+document.addEventListener('mouseup',   () => cursorDot.classList.remove('clicking'));
+
+// Expand ring on interactive elements
+const hoverTargets = 'a, button, .about-card, .event-card, .topic-tag, .social-btn, .nav-cta';
 document.querySelectorAll(hoverTargets).forEach(el => {
   el.addEventListener('mouseenter', () => cursorRing.classList.add('hovering'));
   el.addEventListener('mouseleave', () => cursorRing.classList.remove('hovering'));
@@ -40,7 +43,7 @@ document.querySelectorAll(hoverTargets).forEach(el => {
 
 cursorDot.classList.add('hidden');
 cursorRing.classList.add('hidden');
-animateRing();
+animateCursor();
 
 // ── TEXT SCRAMBLE ──
 const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%&';
