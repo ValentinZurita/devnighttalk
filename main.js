@@ -39,24 +39,36 @@ window.addEventListener('load', () => {
   const h1 = document.querySelector('#hero h1');
   if (!h1) return;
 
+  const line1 = h1.querySelector('.hero-line:not(.gradient-text)');
+  const line2 = h1.querySelector('.gradient-text.hero-line');
+  if (!line1 || !line2) return;
+
+  const t1 = line1.textContent.trim();
+  const t2 = line2.textContent.trim();
+  line1.textContent = t1;
+  line2.textContent = t2;
+
   const isMobile = window.matchMedia('(max-width: 768px)').matches;
   if (isMobile) h1.classList.add('hero-headline--decode');
 
-  const textNode = h1.childNodes[0];
-  if (!textNode || textNode.nodeType !== Node.TEXT_NODE) return;
-
-  const original = textNode.textContent.trim();
-  textNode.textContent = original;
-
-  const span = h1.querySelector('.gradient-text');
-  const spanText = span ? span.textContent : '';
-
-  const p1 = scramble(textNode, original, 1000, 300);
-  const p2 = span ? scramble(span, spanText, 900, 600) : Promise.resolve();
+  const p1 = scramble(line1, t1, 1000, 300);
+  const p2 = scramble(line2, t2, 900, 600);
 
   Promise.all([p1, p2]).then(() => {
     h1.classList.remove('hero-headline--decode');
   });
+});
+
+// ── MAP: carga el iframe solo al tocar (Google Maps es pesado) ──
+document.getElementById('map-facade')?.addEventListener('click', () => {
+  const iframe = document.getElementById('map-iframe');
+  const facade = document.getElementById('map-facade');
+  const src = iframe?.dataset?.src;
+  if (!iframe || !src) return;
+  iframe.src = src;
+  iframe.removeAttribute('data-src');
+  iframe.removeAttribute('hidden');
+  facade?.setAttribute('hidden', '');
 });
 
 // ── SCROLL REVEAL ──
