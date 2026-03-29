@@ -196,6 +196,30 @@ h1 {
   z-index: 1;
 }
 
+/* Hero title en móvil: altura fija para que el scramble no mueva los botones */
+@media (max-width: 768px) {
+  #hero h1 {
+    min-height: 2.5em;
+    line-height: 1.12;
+    max-width: 19ch;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Durante el decode: monospace = mismos anchos por carácter (sin reflow feo) */
+  #hero h1.hero-headline--decode {
+    font-family: ui-monospace, "SF Mono", "Menlo", "Consolas", monospace;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+  }
+
+  #hero h1.hero-headline--decode .gradient-text {
+    font-family: inherit;
+    font-weight: inherit;
+    letter-spacing: inherit;
+  }
+}
+
 .gradient-text {
   background: linear-gradient(135deg, #fff 0%, #b8b0ff 30%, #ff6fff 65%, #b8b0ff 100%);
   background-size: 300% 300%;

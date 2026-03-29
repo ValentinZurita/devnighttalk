@@ -3,49 +3,60 @@
 const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%&';
 
 function scramble(el, finalText, duration = 1200, delay = 0) {
-  const total = finalText.length;
-  const startTime = performance.now() + delay;
+  return new Promise((resolve) => {
+    const total = finalText.length;
+    const startTime = performance.now() + delay;
 
-  function tick(now) {
-    const elapsed = Math.max(0, now - startTime);
-    const progress = Math.min(elapsed / duration, 1);
-    const revealed = Math.floor(progress * total);
+    function tick(now) {
+      const elapsed = Math.max(0, now - startTime);
+      const progress = Math.min(elapsed / duration, 1);
+      const revealed = Math.floor(progress * total);
 
-    let result = '';
-    for (let i = 0; i < total; i++) {
-      if (finalText[i] === ' ' || finalText[i] === '\n') {
-        result += finalText[i];
-      } else if (i < revealed) {
-        result += finalText[i];
-      } else {
-        result += CHARS[Math.floor(Math.random() * CHARS.length)];
+      let result = '';
+      for (let i = 0; i < total; i++) {
+        if (finalText[i] === ' ' || finalText[i] === '\n') {
+          result += finalText[i];
+        } else if (i < revealed) {
+          result += finalText[i];
+        } else {
+          result += CHARS[Math.floor(Math.random() * CHARS.length)];
+        }
+      }
+      el.textContent = result;
+
+      if (progress < 1) requestAnimationFrame(tick);
+      else {
+        el.textContent = finalText;
+        resolve();
       }
     }
-    el.textContent = result;
 
-    if (progress < 1) requestAnimationFrame(tick);
-    else el.textContent = finalText;
-  }
-
-  requestAnimationFrame(tick);
+    requestAnimationFrame(tick);
+  });
 }
 
 window.addEventListener('load', () => {
   const h1 = document.querySelector('#hero h1');
   if (!h1) return;
 
-  // Scramble the plain text node ("La comunidad")
-  const textNode = h1.firstChild;
+  const isMobile = window.matchMedia('(max-width: 768px)').matches;
+  if (isMobile) h1.classList.add('hero-headline--decode');
+
+  const textNode = h1.childNodes[0];
+  if (!textNode || textNode.nodeType !== Node.TEXT_NODE) return;
+
   const original = textNode.textContent.trim();
   textNode.textContent = original;
-  scramble(textNode, original, 1000, 300);
 
-  // Scramble the gradient span ("dev de Villa.")
   const span = h1.querySelector('.gradient-text');
-  if (span) {
-    const spanText = span.textContent;
-    scramble(span, spanText, 900, 600);
-  }
+  const spanText = span ? span.textContent : '';
+
+  const p1 = scramble(textNode, original, 1000, 300);
+  const p2 = span ? scramble(span, spanText, 900, 600) : Promise.resolve();
+
+  Promise.all([p1, p2]).then(() => {
+    h1.classList.remove('hero-headline--decode');
+  });
 });
 
 // ── SCROLL REVEAL ──
