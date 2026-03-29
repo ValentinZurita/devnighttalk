@@ -928,8 +928,10 @@ footer {
 
   .footer-top { flex-direction: column; }
 
-  .stats-grid { grid-template-columns: 1fr 1fr; }
-  .stat-item:last-child { grid-column: span 2; }
+  .stats-grid { grid-template-columns: repeat(3, 1fr); }
+  .stat-item:last-child { grid-column: 1 / -1; }
+  .stat-item { padding: 28px 12px; }
+  .stat-num { font-size: 36px; letter-spacing: -1px; }
 
   .countdown-item { min-width: 56px; }
   .countdown-grid { gap: 4px; }
