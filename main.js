@@ -46,6 +46,16 @@ const counterObserver = new IntersectionObserver((entries) => {
 
 document.querySelectorAll('.stats-grid').forEach(el => counterObserver.observe(el));
 
+// ── SCROLL PROGRESS BAR ──
+const progressBar = document.getElementById('progress-bar');
+
+window.addEventListener('scroll', () => {
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+  progressBar.style.width = pct + '%';
+}, { passive: true });
+
 // ── NAV ACTIVE HIGHLIGHT ON SCROLL ──
 const sections = document.querySelectorAll('section[id]');
 const navLinks = document.querySelectorAll('.nav-links a');
@@ -59,6 +69,87 @@ window.addEventListener('scroll', () => {
     a.style.color = a.getAttribute('href') === `#${current}` ? '#f5f5f7' : '';
   });
 }, { passive: true });
+
+// ── HAMBURGER MENU ──
+const hamburger   = document.getElementById('hamburger');
+const mobileMenu  = document.getElementById('mobile-menu');
+const mobileOverlay = document.getElementById('mobile-overlay');
+
+function openMenu() {
+  hamburger.classList.add('open');
+  mobileMenu.classList.add('open');
+  mobileOverlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeMenu() {
+  hamburger.classList.remove('open');
+  mobileMenu.classList.remove('open');
+  mobileOverlay.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+hamburger.addEventListener('click', () => {
+  hamburger.classList.contains('open') ? closeMenu() : openMenu();
+});
+
+mobileOverlay.addEventListener('click', closeMenu);
+
+mobileMenu.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', closeMenu);
+});
+
+// ── COUNTDOWN TO NEXT THURSDAY 7PM CST ──
+function getNextEventDate() {
+  // CST = UTC-6 · Find next Thursday at 19:00 CST
+  const now = new Date();
+  const cstNow = new Date(now.getTime() - 6 * 3600 * 1000); // shift to CST
+
+  const day = cstNow.getUTCDay(); // 0=Sun … 4=Thu
+  let daysAhead = (4 - day + 7) % 7;
+
+  // If today IS Thursday but it's already past 7PM CST, push to next week
+  if (daysAhead === 0 && (cstNow.getUTCHours() > 19 || (cstNow.getUTCHours() === 19 && cstNow.getUTCMinutes() >= 0))) {
+    daysAhead = 7;
+  }
+  // If it hasn't started yet (exactly 0 days, before 7PM) keep daysAhead = 0
+  if (daysAhead === 0 && cstNow.getUTCHours() < 19) {
+    daysAhead = 0;
+  }
+
+  const target = new Date(cstNow);
+  target.setUTCDate(target.getUTCDate() + daysAhead);
+  target.setUTCHours(19, 0, 0, 0); // 7PM in CST space
+
+  // Convert back to real UTC for comparison with Date.now()
+  return new Date(target.getTime() + 6 * 3600 * 1000);
+}
+
+function updateCountdown() {
+  const now  = new Date();
+  const diff = getNextEventDate() - now;
+
+  if (diff <= 0) {
+    document.getElementById('cd-days').textContent  = '00';
+    document.getElementById('cd-hours').textContent = '00';
+    document.getElementById('cd-mins').textContent  = '00';
+    document.getElementById('cd-secs').textContent  = '00';
+    return;
+  }
+
+  const days  = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const mins  = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+  const secs  = Math.floor((diff % (1000 * 60)) / 1000);
+
+  document.getElementById('cd-days').textContent  = String(days).padStart(2, '0');
+  document.getElementById('cd-hours').textContent = String(hours).padStart(2, '0');
+  document.getElementById('cd-mins').textContent  = String(mins).padStart(2, '0');
+  document.getElementById('cd-secs').textContent  = String(secs).padStart(2, '0');
+}
+
+updateCountdown();
+setInterval(updateCountdown, 1000);
 
 // ── HERO CURSOR SPOTLIGHT ──
 const hero = document.getElementById('hero');

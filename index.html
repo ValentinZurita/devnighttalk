@@ -4,12 +4,31 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dev Night Talks — Villahermosa, Tabasco</title>
+
+  <!-- Open Graph -->
+  <meta property="og:type"        content="website" />
+  <meta property="og:url"         content="https://devnighttalks.mx/" />
+  <meta property="og:title"       content="Dev Night Talks — Villahermosa, Tabasco" />
+  <meta property="og:description" content="La comunidad dev de Villa. Charlas tech, buena vibra y comunidad real. Cada jueves a las 7 PM en LATI.mx." />
+  <meta property="og:image"       content="https://devnighttalks.mx/og-image.png" />
+
+  <!-- Twitter / X -->
+  <meta name="twitter:card"        content="summary_large_image" />
+  <meta name="twitter:title"       content="Dev Night Talks — Villahermosa, Tabasco" />
+  <meta name="twitter:description" content="La comunidad dev de Villa. Cada jueves a las 7 PM en LATI.mx." />
+  <meta name="twitter:image"       content="https://devnighttalks.mx/og-image.png" />
+
+  <meta name="description" content="Dev Night Talks es la comunidad de desarrolladores en Villahermosa, Tabasco. Nos reunimos cada jueves a las 7 PM en LATI.mx para charlas tech, aprendizaje y networking." />
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+
+  <!-- SCROLL PROGRESS -->
+  <div id="progress-bar"></div>
 
   <!-- NAV -->
   <nav>
@@ -20,8 +39,25 @@
       <li><a href="#location">Ubicación</a></li>
       <li><a href="#topics">Temas</a></li>
     </ul>
-    <a href="https://www.meetup.com/dev-night-talks/" target="_blank" rel="noopener" class="nav-cta">Únete →</a>
+    <div class="nav-right">
+      <a href="https://www.meetup.com/dev-night-talks/" target="_blank" rel="noopener" class="nav-cta">Únete →</a>
+      <button class="hamburger" id="hamburger" aria-label="Menú">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
   </nav>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobile-menu">
+    <ul>
+      <li><a href="#about">Nosotros</a></li>
+      <li><a href="#events">Eventos</a></li>
+      <li><a href="#location">Ubicación</a></li>
+      <li><a href="#topics">Temas</a></li>
+    </ul>
+    <a href="https://www.meetup.com/dev-night-talks/" target="_blank" rel="noopener" class="btn-primary">Únete en Meetup</a>
+  </div>
+  <div class="mobile-overlay" id="mobile-overlay"></div>
 
   <!-- HERO -->
   <section id="hero">
@@ -93,6 +129,21 @@
     <p class="section-label reveal">Próximos eventos</p>
     <h2 class="section-title reveal">Agenda de abril.</h2>
     <p class="section-sub reveal">Jueves a las 7:00 PM · LATI.mx, Villahermosa</p>
+
+    <!-- COUNTDOWN -->
+    <div class="countdown-widget reveal">
+      <p class="countdown-label">Próximo evento en</p>
+      <div class="countdown-grid">
+        <div class="countdown-item"><span id="cd-days">00</span><small>días</small></div>
+        <div class="countdown-sep">:</div>
+        <div class="countdown-item"><span id="cd-hours">00</span><small>horas</small></div>
+        <div class="countdown-sep">:</div>
+        <div class="countdown-item"><span id="cd-mins">00</span><small>min</small></div>
+        <div class="countdown-sep">:</div>
+        <div class="countdown-item"><span id="cd-secs">00</span><small>seg</small></div>
+      </div>
+    </div>
+
     <div class="events-list">
 
       <a href="https://www.meetup.com/dev-night-talks/events/313995727/" target="_blank" rel="noopener" class="event-card reveal">
